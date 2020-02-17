@@ -4,26 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>pathfinding</title>
-    <style>
-      html,
-      body {
-        height: 100%;
-      }
-
-      body {
-        background-color: rgb(100, 100, 100);
-        margin: 0;
-        display: flex;
-
-        /* This centers our sketch horizontally. */
-        justify-content: center;
-
-        /* This centers our sketch vertically. */
-      }
-      canvas {
-        margin-top: 50px;
-      }
-    </style>
+    <link rel="stylesheet" type="text/css" href="style.css" />
     <script src="p5/p5.min.js"></script>
     <script src="sketch.js"></script>
     <script src="mouse.js"></script>
@@ -32,15 +13,17 @@
     <script src="level.js"></script>
   </head>
   <body>
-    <button
-      onclick="menuClicked()"
-      style="position:fixed; left:10px; top:10px; background-color: rgba(0,0,0,0.5); color:white;padding:3px"
-    >
-      Menu
-    </button>
-    <div
-      id="score"
-      style="position:fixed; left:80px; top:10px; background-color: rgba(0,0,0,0.5); color:white;padding:3px"
-    ></div>
+    <div class="uiContainer">
+      <button onclick="menuToggle()" class="btn">
+        Menu
+      </button>
+      <button onclick="nextGenButton()" class="btn">
+        NextGeneration
+      </button>
+      <div
+        id="score"
+        style="background-color: rgba(0,0,0,0.5); color:white;padding:3px"
+      ></div>
+    </div>
   </body>
 </html>

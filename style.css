@@ -1,0 +1,32 @@
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background-color: rgb(100, 100, 100);
+  margin: 0;
+  display: flex;
+
+  /* This centers our sketch horizontally. */
+  justify-content: center;
+
+  /* This centers our sketch vertically. */
+}
+canvas {
+  margin-top: 50px;
+}
+#score {
+  float: left;
+}
+.btn {
+  padding: 3px;
+  float: left;
+}
+.uiContainer {
+  position: fixed;
+  left: 10px;
+  top: 10px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+}

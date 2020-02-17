@@ -1,11 +1,11 @@
-let numChildren = 1000;
+let numChildren = 100;
 let children = [];
 let inputNodes;
 let outputNodes;
 let intermediateLayers;
 let variation = 0.001;
 let generation = 1;
-let factor = 0.01;
+let factor = 0.02;
 let tempml;
 let percentToKeep = 1 / 10; //percent of best children to keep as it is for next generation
 /*

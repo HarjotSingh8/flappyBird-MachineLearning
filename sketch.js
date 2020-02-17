@@ -7,22 +7,25 @@ function setup() {
   canvasW = windowWidth;
   canvasH = windowHeight - 50;
   createCanvas(canvasW, canvasH);
-  frameRate(30);
+  frameRate(60);
   dist = 0;
   level = new Level();
-  tempml = new MachineLearning(2, 1, [16, 16, 16, 8, 4, 2]);
+  tempml = new MachineLearning(3, 1, [8, 8, 4, 2]);
   strokeWeight(1);
   //level.draw();
   initBirds();
   document.getElementById("score").innerHTML = score;
+  //draw();
+  //noLoop();
+  //while (true) {
+  //  draw();
+  //}
 }
 
 function draw() {
   background(150, 150, 210);
-  scoreCounter++;
   if (aliveBirds == 0 && birdsInitialised == true) {
     nextGenerationBirds();
-    scoreCounter = 0;
   }
   fill(255);
   level.draw();
