@@ -6,8 +6,8 @@ let aliveBirds = numChildren;
 let birdsInitialised = false;
 let sensorLength = 15;
 let birdPositionX = 100;
-let gravity = 0.5;
-
+let gravity = 2;
+let score = 0;
 function initBirds() {
   for (let i = 0; i < numChildren; i++) {
     birds.push(new Bird());
@@ -33,6 +33,8 @@ function resetBirds() {
   birdsInitialised = true;
 }
 function nextGenerationBirds() {
+  score = 0;
+  document.getElementById("score").innerHTML = score;
   level = new Level();
   console.log("new generation");
   nextGeneration();
@@ -46,7 +48,7 @@ class Bird {
     this.speed = 0;
     this.sensors = [];
     this.active = true;
-    this.ml = new MachineLearning(5, 1, [16, 16, 16, 8, 4, 2]);
+    this.ml = new MachineLearning(2, 1, [16, 16, 16, 8, 4, 2]);
     this.distance = 0;
     children.push(this.ml);
   }
@@ -58,9 +60,9 @@ class Bird {
     this.pos += this.speed;
     this.speed += gravity;
     let output = this.ml.process([
-      this.pos,
-      canvasH - this.pos,
-      this.speed,
+      //this.pos,
+      //canvasH - this.pos,
+      //this.speed,
       level.pipes[0].x - birdPositionX,
       level.pipes[0].y - this.pos
     ]);
@@ -102,6 +104,13 @@ class Bird {
       if (this.active) {
         this.active = false;
         aliveBirds--;
+      }
+    }
+    if (this.active == false) {
+      if (this.pos > level.pipes[0].y + pipeOpening)
+        this.distance -= Math.sqrt(this.pos - level.pipes[0].y - pipeOpening);
+      else {
+        this.distance -= Math.sqrt(level.pipes[0].y + pipeOpening - this.pos);
       }
     }
   }

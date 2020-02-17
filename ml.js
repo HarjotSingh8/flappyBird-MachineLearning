@@ -5,7 +5,7 @@ let outputNodes;
 let intermediateLayers;
 let variation = 0.001;
 let generation = 1;
-let factor = 0;
+let factor = 0.01;
 let tempml;
 let percentToKeep = 1 / 10; //percent of best children to keep as it is for next generation
 /*
@@ -19,8 +19,8 @@ function nextGeneration() {
    */
   generation++;
   //runDuration += 10 * generation;
-  factor += generation;
-  percentToKeep += 1 / 100;
+  //factor += generation;
+  //percentToKeep += 1 / 100;
   sortByFitness();
   for (let i = parseInt(birds.length * percentToKeep); i < birds.length; i++) {
     //console.log(
@@ -52,10 +52,10 @@ function sortByFitness() {
         birds[j].distance = temp;
       }
     }
-    //console.log(cars[i].distance);
+    console.log(birds[i].distance);
     //cars[i].resetFitness();
   }
-  console.log(birds[0].distance);
+  //console.log(birds[i].distance);
 }
 
 class MachineLearning {

@@ -10,10 +10,11 @@ function setup() {
   frameRate(30);
   dist = 0;
   level = new Level();
-  tempml = new MachineLearning(5, 1, [16, 16, 16, 8, 4, 2]);
+  tempml = new MachineLearning(2, 1, [16, 16, 16, 8, 4, 2]);
   strokeWeight(1);
   //level.draw();
   initBirds();
+  document.getElementById("score").innerHTML = score;
 }
 
 function draw() {
