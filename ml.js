@@ -199,11 +199,13 @@ class MachineLearning {
         /*multiplying weights with inputs and adding biases for every node in inupt and node in layer*/
         values[j] +=
           inputs[i] * this.weights[layer][i][j] + this.biases[layer][i][j];
+        //if (flag) console.log("yes");
         //console.log(values);
       }
     }
     if (layer == this.layers.length - 2) {
       //console.log(values);
+      flag = false;
       return values;
     } else {
       return this.processLayer(layer + 1, values);

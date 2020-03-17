@@ -45,7 +45,7 @@ class Level {
       document.getElementById("score").innerHTML = score;
       this.pipes.shift();
     }
-    rect(20, 10, 20, 20);
+    //rect(20, 10, 20, 20);
   }
 }
 
@@ -77,7 +77,8 @@ class Background {
     this.terrainLevels = 4;
     this.terrainDistance = windowHeight / this.terrainLevels;
     this.skyGradient = createImage(windowWidth, windowHeight);
-    this.mountains = createImage(canvasW + 1, windowHeight);
+    this.mountains = createImage(canvasW + 1, canvasH);
+    this.smallerMountains = createImage(canvasW + 1, canvasH);
     this.plains = createImage(windowWidth, windowHeight);
     let a = setTimeout(function() {
       bg.setupSkyGradient();
@@ -92,34 +93,35 @@ class Background {
     //}, 20);
   }
   draw() {
-    //if (this.displacement > windowWidth) this.displacement = 0;
+    //if (this.displacement > 6 * windowWidth) this.displacement = 0;
     this.displacement++;
     image(this.skyGradient, 0, 0, windowWidth, windowHeight);
     image(this.mountains, -this.displacement % canvasW, 0);
     image(this.mountains, (-this.displacement % canvasW) + canvasW, 0);
+    image(this.smallerMountains, (-this.displacement * 1.5) % canvasW, 0);
+    image(
+      this.smallerMountains,
+      ((-this.displacement * 1.5) % canvasW) + canvasW,
+      0
+    );
   }
   setupSkyGradient() {
     this.skyGradient.loadPixels();
     let n;
-    for (let i = 0; i < windowWidth; i++) {
-      for (let j = 0; j < windowHeight; j++) {
+    for (let i = 0; i < canvasW; i++) {
+      for (let j = 0; j < canvasH; j++) {
         n = noise(
-          i / 100 +
-            100 * sin((Math.PI * (j / windowHeight + i / windowWidth)) / 100),
-          j / 100 +
-            100 * cos((Math.PI * (j / windowHeight + i / windowWidth)) / 100)
+          i / 100 + 100 * sin((Math.PI * (j / canvasH + i / canvasW)) / 100),
+          j / 100 + 100 * cos((Math.PI * (j / canvasH + i / canvasW)) / 100)
         );
 
-        if (n / 4 + random(j / windowHeight, 0.3 + j / windowHeight) > 0.8) {
+        if (n / 4 + random(j / canvasH, 0.3 + j / canvasH) > 0.8) {
           //if (n > 0.5) {
           this.skyGradient.set(i, j, color(138, 93, 128));
           /*this.skyGradient.set(2 * i + 1, 2 * j, color(163, 102, 135));
           this.skyGradient.set(2 * i, 2 * j + 1, color(163, 102, 135));
           this.skyGradient.set(2 * i + 1, 2 * j + 1, color(163, 102, 135));*/
-        } else if (
-          n / 4 + random(j / windowHeight, 0.3 + j / windowHeight) >
-          0.5
-        ) {
+        } else if (n / 4 + random(j / canvasH, 0.3 + j / canvasH) > 0.5) {
           //else if (n > 0.5) {
           //if (n < 0.5) {
           this.skyGradient.set(i, j, color(153, 98, 132));
@@ -230,7 +232,7 @@ class Background {
         }
       }
     }
-
+    this.mountains.updatePixels();
     n = random(2, 4);
     //let n = 1;
     /*for (let i = 0; i < 10; i++) {
@@ -247,6 +249,7 @@ class Background {
         }
       }
     }*/
+
     range = [];
     for (let i = 0; i < n; i++) {
       range.push([
@@ -257,6 +260,7 @@ class Background {
         random(canvasH / 6, canvasH / 3)
       ]);
     }
+    this.smallerMountains.loadPixels();
     for (let i = 0; i < range.length; i++) {
       let depth = random(-10, 10);
       for (let j = range[i][1]; j > 0; j--) {
@@ -272,7 +276,7 @@ class Background {
           k > 0;
           k--
         ) {
-          this.mountains.set(
+          this.smallerMountains.set(
             range[i][0] - k,
             canvasH - range[i][1] + j,
             color(81 + depth, 46 + depth, 71 + depth)
@@ -293,7 +297,7 @@ class Background {
           k > -1;
           k--
         ) {
-          this.mountains.set(
+          this.smallerMountains.set(
             range[i][0] - k / 3,
             canvasH - range[i][1] + j,
             color(48 + depth, 33 + depth, 54 + depth)
@@ -313,7 +317,7 @@ class Background {
           k > 0;
           k--
         ) {
-          this.mountains.set(
+          this.smallerMountains.set(
             range[i][0] + k,
             canvasH - range[i][1] + j,
             color(48 + depth, 33 + depth, 54 + depth)
@@ -321,8 +325,8 @@ class Background {
         }
       }
     }
-    this.mountains.updatePixels();
-    //makeDithered(this.mountains, 4);
+    this.smallerMountains.updatePixels();
+    //makeDithered(this.mountains, 2);
   }
   setupPlains() {
     //here plains

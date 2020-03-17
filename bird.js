@@ -35,11 +35,13 @@ function resetBirds() {
 function nextGenerationBirds() {
   aliveBirds = numChildren;
   score = 0;
-  document.getElementById("score").innerHTML = score;
-  level = new Level();
-  console.log("new generation");
   nextGeneration();
+  level = new Level();
   resetBirds();
+  document.getElementById("score").innerHTML = score;
+  document.getElementById("generation").innerHTML = generation;
+  document.getElementById("alive").innerHTML = aliveBirds;
+  console.log("new generation");
 }
 
 class Bird {
@@ -48,7 +50,7 @@ class Bird {
     this.speed = 0;
     this.sensors = [];
     this.active = true;
-    this.ml = new MachineLearning(3, 1, [8, 8, 4, 2]);
+    this.ml = new MachineLearning(3, 1, [100, 100, 100, 100]);
     this.distance = 0;
     children.push(this.ml);
   }
@@ -110,9 +112,13 @@ class Bird {
     }
     if (this.active == false) {
       if (this.pos > level.pipes[0].y + pipeOpening)
-        this.distance -= Math.sqrt(this.pos - level.pipes[0].y - pipeOpening);
+        this.distance -=
+          (this.pos - (level.pipes[0].y - pipeOpening)) *
+          (this.pos - (level.pipes[0].y - pipeOpening));
       else {
-        this.distance -= Math.sqrt(level.pipes[0].y + pipeOpening - this.pos);
+        this.distance -=
+          (level.pipes[0].y + pipeOpening - this.pos) *
+          (level.pipes[0].y + pipeOpening - this.pos);
       }
     }
   }

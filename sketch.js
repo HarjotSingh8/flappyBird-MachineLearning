@@ -6,6 +6,7 @@ let canvasH;
 let pipeImg;
 let pipeImgRev;
 let bg;
+let flag = true;
 function setup() {
   canvasW = windowWidth;
   canvasH = windowHeight - 50;
@@ -15,11 +16,12 @@ function setup() {
   dist = 0;
   level = new Level();
   bg = new Background();
-  tempml = new MachineLearning(3, 1, [8, 8, 4, 2]);
+  tempml = new MachineLearning(3, 1, [100, 100, 100, 100]);
   strokeWeight(1);
   //level.draw();
   initBirds();
   document.getElementById("score").innerHTML = score;
+  document.getElementById("generation").innerHTML = generation;
   //draw();
   //noLoop();
   //while (true) {
@@ -39,5 +41,6 @@ function draw() {
   if (birdsInitialised) {
     showBirds();
   }
+  document.getElementById("alive").innerHTML = aliveBirds;
   //image(pipeImgRev, 0, 0);
 }
