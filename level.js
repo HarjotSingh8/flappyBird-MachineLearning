@@ -71,6 +71,264 @@ class Pipe {
   }
 }
 
+class Background {
+  constructor() {
+    this.displacement = 0;
+    this.terrainLevels = 4;
+    this.terrainDistance = windowHeight / this.terrainLevels;
+    this.skyGradient = createImage(windowWidth, windowHeight);
+    this.mountains = createImage(canvasW + 1, windowHeight);
+    this.plains = createImage(windowWidth, windowHeight);
+    let a = setTimeout(function() {
+      bg.setupSkyGradient();
+    }, 0);
+    let b = setTimeout(function() {
+      bg.setupMountains();
+    }, 0);
+    //this.setupPlains();
+
+    //setTimeout(function() {
+    //  bg.setupPlains();
+    //}, 20);
+  }
+  draw() {
+    //if (this.displacement > windowWidth) this.displacement = 0;
+    this.displacement++;
+    image(this.skyGradient, 0, 0, windowWidth, windowHeight);
+    image(this.mountains, -this.displacement % canvasW, 0);
+    image(this.mountains, (-this.displacement % canvasW) + canvasW, 0);
+  }
+  setupSkyGradient() {
+    this.skyGradient.loadPixels();
+    let n;
+    for (let i = 0; i < windowWidth; i++) {
+      for (let j = 0; j < windowHeight; j++) {
+        n = noise(
+          i / 100 +
+            100 * sin((Math.PI * (j / windowHeight + i / windowWidth)) / 100),
+          j / 100 +
+            100 * cos((Math.PI * (j / windowHeight + i / windowWidth)) / 100)
+        );
+
+        if (n / 4 + random(j / windowHeight, 0.3 + j / windowHeight) > 0.8) {
+          //if (n > 0.5) {
+          this.skyGradient.set(i, j, color(138, 93, 128));
+          /*this.skyGradient.set(2 * i + 1, 2 * j, color(163, 102, 135));
+          this.skyGradient.set(2 * i, 2 * j + 1, color(163, 102, 135));
+          this.skyGradient.set(2 * i + 1, 2 * j + 1, color(163, 102, 135));*/
+        } else if (
+          n / 4 + random(j / windowHeight, 0.3 + j / windowHeight) >
+          0.5
+        ) {
+          //else if (n > 0.5) {
+          //if (n < 0.5) {
+          this.skyGradient.set(i, j, color(153, 98, 132));
+          /*this.skyGradient.set(2 * i + 1, 2 * j, color(138, 93, 128));
+          this.skyGradient.set(2 * i, 2 * j + 1, color(138, 93, 128));
+          this.skyGradient.set(2 * i + 1, 2 * j + 1, color(138, 93, 128));*/
+        } else {
+          this.skyGradient.set(i, j, color(174, 106, 138));
+          /*this.skyGradient.set(2 * i + 1, 2 * j, color(174, 106, 138));
+          this.skyGradient.set(2 * i, 2 * j + 1, color(174, 106, 138));
+          this.skyGradient.set(2 * i + 1, 2 * j + 1, color(174, 106, 138));*/
+        }
+      }
+    }
+    this.skyGradient.updatePixels();
+    makeDithered(this.skyGradient, 4);
+  }
+
+  setupMountains() {
+    this.mountains.loadPixels();
+    let n = random(1, 3);
+    //let n = 1;
+    /*for (let i = 0; i < 10; i++) {
+      for (j = 0; j < windowWidth; j++) {
+        //if ((random() < 0, 1))
+        n = noise(
+          i / 10 + sin((2 * Math.PI * j) / windowWidth),
+          i / 10 + cos((2 * Math.PI * j) / windowWidth)
+        );
+
+        n *= 200;
+        for (let k = n + 200; k < windowHeight; k++) {
+          this.mountains.set(j, k, color(245, 199, 174));
+        }
+      }
+    }*/
+    let range = [];
+    for (let i = 0; i < n; i++) {
+      range.push([
+        random(
+          (i * canvasW) / n + canvasW / (4 * n),
+          ((i + 1) * canvasW) / n - canvasW / (4 * n)
+        ),
+        random(canvasH / 3, (2 * canvasH) / 3)
+      ]);
+    }
+    for (let i = 0; i < range.length; i++) {
+      let depth = random(-20, 20);
+      for (let j = range[i][1]; j > 0; j--) {
+        for (
+          let k =
+            j -
+            (j *
+              noise(
+                10 * (1 + i) + sin((2 * Math.PI * j) / range[i][1]),
+                10 * (1 + i) + cos((2 * Math.PI * j) / range[i][1])
+              )) /
+              5;
+          k > 0;
+          k--
+        ) {
+          this.mountains.set(
+            range[i][0] - k,
+            canvasH - range[i][1] + j,
+            color(215 + depth, 120 + depth, 132 + depth)
+          );
+        }
+      }
+
+      for (let j = range[i][1]; j > 0; j--) {
+        for (
+          let k =
+            j -
+            j *
+              (-j / 1000 +
+                noise(
+                  10 * (1 + i) + sin((2 * Math.PI * j) / range[i][1]),
+                  10 * (1 + i) + cos((2 * Math.PI * j) / range[i][1])
+                ));
+          k > -1;
+          k--
+        ) {
+          this.mountains.set(
+            range[i][0] - k / 3,
+            canvasH - range[i][1] + j,
+            color(103 + depth, 54 + depth, 84 + depth)
+          );
+        }
+      }
+      for (let j = range[i][1]; j > 0; j--) {
+        for (
+          let k =
+            j -
+            (j *
+              noise(
+                10 * (1 + i) + sin((2 * Math.PI * j) / range[i][1]),
+                10 * (1 + i) + cos((2 * Math.PI * j) / range[i][1])
+              )) /
+              5;
+          k > 0;
+          k--
+        ) {
+          this.mountains.set(
+            range[i][0] + k,
+            canvasH - range[i][1] + j,
+            color(103 + depth, 54 + depth, 84 + depth)
+          );
+        }
+      }
+    }
+
+    n = random(2, 4);
+    //let n = 1;
+    /*for (let i = 0; i < 10; i++) {
+      for (j = 0; j < windowWidth; j++) {
+        //if ((random() < 0, 1))
+        n = noise(
+          i / 10 + sin((2 * Math.PI * j) / windowWidth),
+          i / 10 + cos((2 * Math.PI * j) / windowWidth)
+        );
+
+        n *= 200;
+        for (let k = n + 200; k < windowHeight; k++) {
+          this.mountains.set(j, k, color(245, 199, 174));
+        }
+      }
+    }*/
+    range = [];
+    for (let i = 0; i < n; i++) {
+      range.push([
+        random(
+          (i * canvasW) / n + canvasW / (4 * n),
+          ((i + 1) * canvasW) / n - canvasW / (4 * n)
+        ),
+        random(canvasH / 6, canvasH / 3)
+      ]);
+    }
+    for (let i = 0; i < range.length; i++) {
+      let depth = random(-10, 10);
+      for (let j = range[i][1]; j > 0; j--) {
+        for (
+          let k =
+            j -
+            (j *
+              noise(
+                10 * (1 + i) + sin((2 * Math.PI * j) / range[i][1]),
+                10 * (1 + i) + cos((2 * Math.PI * j) / range[i][1])
+              )) /
+              5;
+          k > 0;
+          k--
+        ) {
+          this.mountains.set(
+            range[i][0] - k,
+            canvasH - range[i][1] + j,
+            color(81 + depth, 46 + depth, 71 + depth)
+          );
+        }
+      }
+
+      for (let j = range[i][1]; j > 0; j--) {
+        for (
+          let k =
+            j -
+            j *
+              (-j / 1000 +
+                noise(
+                  10 * (1 + i) + sin((2 * Math.PI * j) / range[i][1]),
+                  10 * (1 + i) + cos((2 * Math.PI * j) / range[i][1])
+                ));
+          k > -1;
+          k--
+        ) {
+          this.mountains.set(
+            range[i][0] - k / 3,
+            canvasH - range[i][1] + j,
+            color(48 + depth, 33 + depth, 54 + depth)
+          );
+        }
+      }
+      for (let j = range[i][1]; j > 0; j--) {
+        for (
+          let k =
+            j -
+            (j *
+              noise(
+                10 * (1 + i) + sin((2 * Math.PI * j) / range[i][1]),
+                10 * (1 + i) + cos((2 * Math.PI * j) / range[i][1])
+              )) /
+              5;
+          k > 0;
+          k--
+        ) {
+          this.mountains.set(
+            range[i][0] + k,
+            canvasH - range[i][1] + j,
+            color(48 + depth, 33 + depth, 54 + depth)
+          );
+        }
+      }
+    }
+    this.mountains.updatePixels();
+    //makeDithered(this.mountains, 4);
+  }
+  setupPlains() {
+    //here plains
+  }
+}
+
 function setupImages() {
   setupPipeImg();
 }

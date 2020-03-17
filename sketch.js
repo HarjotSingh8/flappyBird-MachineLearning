@@ -5,6 +5,7 @@ let canvasW;
 let canvasH;
 let pipeImg;
 let pipeImgRev;
+let bg;
 function setup() {
   canvasW = windowWidth;
   canvasH = windowHeight - 50;
@@ -13,6 +14,7 @@ function setup() {
   setupImages();
   dist = 0;
   level = new Level();
+  bg = new Background();
   tempml = new MachineLearning(3, 1, [8, 8, 4, 2]);
   strokeWeight(1);
   //level.draw();
@@ -26,11 +28,12 @@ function setup() {
 }
 
 function draw() {
-  background(150, 150, 210);
+  background(174, 106, 138);
   if (aliveBirds == 0 && birdsInitialised == true) {
     nextGenerationBirds();
   }
   fill(255);
+  bg.draw();
   level.draw();
   fill(100);
   if (birdsInitialised) {
