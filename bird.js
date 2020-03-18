@@ -50,7 +50,7 @@ class Bird {
     this.speed = 0;
     this.sensors = [];
     this.active = true;
-    this.ml = new MachineLearning(3, 1, [100, 100, 100, 100]);
+    this.ml = new MachineLearning(4, 1, [8, 8, 4, 2]);
     this.distance = 0;
     children.push(this.ml);
   }
@@ -68,10 +68,17 @@ class Bird {
       level.pipes[0].x - birdPositionX,
       //level.pipes[0].y - this.pos
       level.pipes[0].y - (this.pos - birdHeight / 2),
-      pipeOpening + level.pipes[0].y - (this.pos + birdHeight / 2)
+      pipeOpening + level.pipes[0].y - (this.pos + birdHeight / 2),
+      canvasH - this.pos
     ]);
+    rect(birdPositionX, level.pipes[0].x - birdPositionX, 10, 1);
+    rect(birdPositionX, level.pipes[0].y, 10, 1);
+    rect(birdPositionX, pipeOpening + level.pipes[0].y, 10, 1);
     if (output[0] > 0) this.jump();
     this.checkColl();
+    /*if (this.active && flag) {
+      this.penaltyScore();
+    }*/
   }
   updateSensors() {
     //implement this
@@ -111,7 +118,7 @@ class Bird {
       }
     }
     if (this.active == false) {
-      if (this.pos > level.pipes[0].y + pipeOpening)
+      /*if (this.pos > level.pipes[0].y + pipeOpening)
         this.distance -=
           (this.pos - (level.pipes[0].y - pipeOpening)) *
           (this.pos - (level.pipes[0].y - pipeOpening));
@@ -119,7 +126,26 @@ class Bird {
         this.distance -=
           (level.pipes[0].y + pipeOpening - this.pos) *
           (level.pipes[0].y + pipeOpening - this.pos);
-      }
+      }*/
+      this.penaltyDeath();
+    }
+  }
+  penaltyDeath() {
+    if (this.pos > level.pipes[0].y + pipeOpening)
+      this.distance -=
+        (this.pos - (level.pipes[0].y - pipeOpening)) *
+        (this.pos - (level.pipes[0].y - pipeOpening));
+    else {
+      this.distance -=
+        (level.pipes[0].y + pipeOpening - this.pos) *
+        (level.pipes[0].y + pipeOpening - this.pos);
+    }
+  }
+  penaltyScore() {
+    if (this.pos > level.temp.y + pipeOpening)
+      this.distance -= this.pos - (level.temp.y - pipeOpening);
+    else {
+      this.distance -= level.temp.y + pipeOpening - this.pos;
     }
   }
   resetFitness() {

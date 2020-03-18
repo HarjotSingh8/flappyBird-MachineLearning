@@ -22,7 +22,6 @@ function mouseisPressed() {
    */
   if (menuIsClicked) {
     menuIsClicked = false;
-    initBirds();
   } else {
     mouseIsPressed = true;
   }

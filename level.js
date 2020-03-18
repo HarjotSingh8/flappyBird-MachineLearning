@@ -41,6 +41,7 @@ class Level {
     if (this.pipes[0].x + pipeWidth + birdWidth / 2 < birdPositionX) {
       this.temp = this.pipes[0];
       console.log(aliveBirds);
+      flag = true;
       score++;
       document.getElementById("score").innerHTML = score;
       this.pipes.shift();
